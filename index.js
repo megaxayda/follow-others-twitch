@@ -35,7 +35,6 @@ const puppeteer = require("puppeteer");
     await page2.evaluate((_) => {
       console.log(document);
       let title = document.querySelector("h2");
-      console.log("title", title.textContent);
 
       if (title) {
         title = title.textContent.toLowerCase();
