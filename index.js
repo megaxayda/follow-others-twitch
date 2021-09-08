@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 
-async function main() {
+(async () => {
   const browser = await puppeteer.launch({
     headless: false,
     args: ["--no-sandbox"],
@@ -33,17 +33,35 @@ async function main() {
 
     await page2.waitForTimeout(6000);
     await page2.evaluate((_) => {
-      const button = document.querySelector(
-        '[data-test-selector="follow-button"]'
-      );
-      if (button) {
-        console.log("clicked");
-        button.click();
+      console.log(document);
+      let title = document.querySelector("h2");
+      console.log("title", title.textContent);
+
+      if (title) {
+        title = title.textContent.toLowerCase();
+        const shouldFollow =
+          title.includes("follow") ||
+          title.includes("chéo") ||
+          title.includes("event") ||
+          title.includes("500") ||
+          title.includes("primo");
+
+        if (shouldFollow) {
+          const button = document.querySelector(
+            '[data-test-selector="follow-button"]'
+          );
+          if (button) {
+            console.log("clicked");
+            button.click();
+          }
+        } else {
+          console.log("skip");
+        }
       }
     });
 
     console.log("step 3");
-    await page2.waitForTimeout(3000);
+    await page2.waitForTimeout(1000);
 
     console.log("step 4");
     await page2.goto("about:blank");
@@ -62,8 +80,4 @@ async function main() {
   }
 
   await browser.close();
-}
-
-main().catch((e) => {
-  console.log(e);
-});
+})();
